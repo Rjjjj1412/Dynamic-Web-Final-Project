@@ -17,7 +17,9 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $catName = fake()->words(rand(1, 3), true);
+        $catName = $this->faker->randomElement([
+        'News', 'Review', 'Podcast', 'Opinion', 'Lifestyle', 'Tech', 'Education', 'Entertainment'
+          ]);
         return [
             'category_name' => $catName,
             'slug' => Str::slug($catName),

@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'registration_date' => now(),
+            'last_login_date' =>  fake()->optional()->dateTimeBetween('-1 month', 'now'),
         ];
     }
 
