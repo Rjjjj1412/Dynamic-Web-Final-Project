@@ -7,7 +7,6 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
@@ -62,10 +61,12 @@ class PostSeeder extends Seeder
 
             // Handle image
             $imageFileName = "{$slugBase}.jpg";
-            $imagePath = "posts/{$imageFileName}";
+            $publicImagePath = public_path("posts/{$imageFileName}");
+            $webImagePath = "posts/{$imageFileName}";
 
-            if (!Storage::disk('public')->exists($imagePath)) {
-                $imagePath = "posts/default.jpg";
+            if (!file_exists($publicImagePath)) {
+                // Fallback to default image if specific image doesn't exist
+                $webImagePath = "posts/default.jpg";
                 echo "No cached image for '{$postData['title']}', using default.\n";
             } else {
                 echo "Using cached image: {$imageFileName}\n";
@@ -90,7 +91,7 @@ class PostSeeder extends Seeder
                 'user_id'            => $user->id,
                 'publication_date'   => now()->subDays(rand(0, 365)),
                 'status'             => fake()->randomElement(['D', 'P', 'I']),
-                'featured_image_url' => Storage::url($imagePath),
+                'featured_image_url' => url($webImagePath), // Use public/posts
                 'views_count'        => fake()->numberBetween(50, 5000),
                 'is_featured'        => $index < $categories->count(),
             ]);
@@ -105,6 +106,6 @@ class PostSeeder extends Seeder
             );
         });
 
-        echo "\n Seeded {$curatedPosts->count()} curated posts successfully.\n";
+        echo "\nSeeded {$curatedPosts->count()} curated posts successfully.\n";
     }
 }
