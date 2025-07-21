@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('status')->comment('D - Draft, P - Published, I - Inactive.')->max(1);
             $table->text('featured_image_url')->comment('URL for the featured image of the post.');
             $table->integer('views_count')->comment('Total views of post.')->default(0);
+            $table->boolean('is_featured')->default(false);
         });
     }
 

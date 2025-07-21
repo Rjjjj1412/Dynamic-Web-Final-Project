@@ -17,13 +17,20 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $catName = $this->faker->randomElement([
-        'News', 'Review', 'Podcast', 'Opinion', 'Lifestyle', 'Tech', 'Education', 'Entertainment'
-          ]);
+        $catName = $this->faker->unique()->randomElement([
+            'Travel',
+            'Food & Drink',
+            'Culture',
+            'Adventure',
+            'Photography',
+            'Hidden Gems',
+            'Seasonal'
+        ]);
+
         return [
             'category_name' => $catName,
             'slug' => Str::slug($catName),
-            'description' => fake()->sentence(rand(1, 5))
+            'description' => $this->faker->sentence(rand(8, 15)), // Longer travel-related desc
         ];
     }
 }
