@@ -166,7 +166,7 @@
             @endforelse
         </div>
         <div class="mt-10">
-            <a href="{{ route('home') }}" class="text-[#1A3D3F] font-medium hover:underline">← Back to Blog</a>
+            <a href="{{ route('blogs') }}" class="text-[#1A3D3F] font-medium hover:underline">← Back to Blog</a>
         </div>
     </section>
 
