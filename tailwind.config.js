@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+import typography from '@tailwindcss/typography'
 export default {
+  darkMode: 'class',
   content: [
     './resources/**/*.blade.php',
     './resources/**/*.js',
@@ -12,5 +14,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [typography],
 }

@@ -61,8 +61,8 @@ class PostSeeder extends Seeder
 
             // Handle image
             $imageFileName = "{$slugBase}.jpg";
-            $publicImagePath = public_path("posts/{$imageFileName}");
-            $webImagePath = "posts/{$imageFileName}";
+            $publicImagePath = public_path("uploads/posts/{$imageFileName}");
+            $webImagePath = "uploads/posts/{$imageFileName}";
 
             if (!file_exists($publicImagePath)) {
                 // Fallback to default image if specific image doesn't exist
@@ -91,7 +91,7 @@ class PostSeeder extends Seeder
                 'user_id'            => $user->id,
                 'publication_date'   => now()->subDays(rand(0, 365)),
                 'status'             => fake()->randomElement(['D', 'P', 'I']),
-                'featured_image_url' => url($webImagePath), // Use public/posts
+                'featured_image_url' => 'uploads/posts/' . $imageFileName,
                 'views_count'        => fake()->numberBetween(50, 5000),
                 'is_featured'        => $index < $categories->count(),
             ]);

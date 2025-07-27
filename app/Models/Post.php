@@ -15,14 +15,15 @@ class Post extends Model
     public $timestamps = false; //add this is table does not have timestamps, check your migration
 
     protected $fillable = [
-        'title',
-        'content',
-        'slug',
-        'publication_date',
-        'last_modified_date',
-        'status',
-        'featured_image_url',
-        'views_count'
+    'title',
+    'content',
+    'slug',
+    'publication_date',
+    'last_modified_date',
+    'status',
+    'featured_image_url',
+    'views_count',
+    'user_id',
     ];
 
     public function user(): BelongsTo

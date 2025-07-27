@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'comment_content',
+        'comment_date',
+        'reviewer_name',
+        'reviewer_email',
+        'is_hidden',
+        'post_id',
+        'user_id',
+    ];
+    
      use HasFactory;
      public $timestamps = false;
     public function user(): BelongsTo

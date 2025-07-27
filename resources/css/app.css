@@ -9,3 +9,13 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.text-gray-700 p {
+  @apply text-justify mb-4 leading-relaxed;
+}
+
+.prose p {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal; /* Ensure normal wrapping */
+}

@@ -2,19 +2,34 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $registration_date
+ * @property \Illuminate\Support\Carbon|null $last_login_date
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User create(array $attributes)
+ * @method bool update(array $attributes = [])
+ * @method bool save(array $options = [])
+ */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    public $timestamps = false; //add this is table does not have timestamps, check your migration
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +40,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'registration_date'
+        'email_verified_at',
+        'registration_date',
+        'last_login_date',
     ];
 
     /**
@@ -39,7 +56,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -47,6 +64,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'registration_date' => 'datetime',
+            'last_login_date' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -56,12 +75,12 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-        public function roles(): BelongsToMany
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_role');
     }
 
-        public function comments(): HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
