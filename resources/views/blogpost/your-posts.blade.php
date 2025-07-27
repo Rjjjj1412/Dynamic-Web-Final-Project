@@ -37,13 +37,20 @@
                         <img :src="post.featured_image_url" class="w-full h-48 object-cover">
                     </template>
                     <div class="p-4 text-[#1A3D3F] prose">
+                        </p>
                         <h2 class="text-lg font-bold mb-1">
                             <a :href="`/blogpost/${post.slug}`" class="hover:underline" x-text="post.title"></a>
                         </h2>
-                        <p class="text-sm text-gray-600 mb-2">
+                        <p class="text-sm text-gray-600 mb-2 flex flex-wrap items-center gap-1">
                             <span class="font-semibold text-[#1A3D3F]" x-text="post.user && post.user.name ? post.user.name : 'Unknown'"></span> ·
                             <span x-text="new Date(post.publication_date).toLocaleDateString()"></span> · 
-                            <span x-text="`${post.views_count ?? 0} views`"></span>
+                            <span x-text="`${post.views_count ?? 0} views`"></span> ·
+                            <template x-if="post.status === 'D'">
+                                <span class="text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded text-xs">Draft</span>
+                            </template>
+                            <template x-if="post.status === 'P'">
+                                <span class="text-green-700 bg-green-100 px-2 py-0.5 rounded text-xs">Published</span>
+                            </template>
                         </p>
                         <p class="text-sm text-gray-700 mb-3" x-text="stripHtml(post.content).slice(0, 130) + '...'"></p>
                         <div class="flex flex-wrap gap-2">
