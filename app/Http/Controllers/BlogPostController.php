@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use App\Models\Comment;
 
+
 class BlogPostController extends Controller
 {
     // Show the Create Post Form
@@ -78,7 +79,8 @@ class BlogPostController extends Controller
             $post->categories()->sync($validated['categories']);
             $post->tags()->sync($validated['tags'] ?? []);
 
-            return redirect()->route('blogpost.create')->with('success', 'Post created successfully!');
+            return redirect()->route('blogpost.show', $post->slug)
+                 ->with('success', 'Post created successfully!');
         } catch (\Exception $e) {
             return back()->withErrors([
                 'error' => 'Something went wrong. Please try again later.',
@@ -142,7 +144,8 @@ class BlogPostController extends Controller
         }
 
         // Only drafts can be updated
-        if ($post->status !== 'D') {
+        $originalStatus = $post->status;
+        if ($originalStatus !== 'D') {
             abort(403, 'Only draft posts can be updated.');
         }
 
@@ -172,7 +175,7 @@ class BlogPostController extends Controller
         $post->categories()->sync($request->categories ?? []);
         $post->tags()->sync($request->tags ?? []);
 
-        return redirect()->back()->with('success', 'Post updated successfully!');
+        return redirect()->route('blogpost.show', $post->slug)->with('success', 'Post updated successfully.');
     }
 
     public function destroy($slug)
@@ -192,5 +195,49 @@ class BlogPostController extends Controller
         $post->delete();
 
         return redirect('/blogs')->with('success', 'Post deleted successfully.');
+    }
+
+    public function yourPosts()
+    {
+        return view('blogpost.your-posts');
+    }
+
+    public function yourPostsJson(Request $request)
+    {
+        $query = Post::with(['categories', 'tags', 'user'])
+            ->where('user_id', Auth::id());
+
+        // Search filter
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Category filter
+        if ($request->filled('category')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('name', $request->category);
+            });
+        }
+
+        // Tag filter
+        if ($request->filled('tag')) {
+            $query->whereHas('tags', function ($q) use ($request) {
+                $q->where('name', $request->tag);
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Sorting
+        $query->orderBy('publication_date', $request->get('sort', 'desc'));
+
+        // Return only the posts array
+        return response()->json($query->paginate(10)->items());
     }
 }

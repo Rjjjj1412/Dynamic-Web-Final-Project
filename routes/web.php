@@ -30,6 +30,10 @@ Route::post('/register', [AuthController::class, 'register']);
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//Your Posts
+Route::get('/your-posts', [BlogPostController::class, 'yourPosts'])->middleware('auth')->name('blogpost.yourposts');
+Route::get('/your-posts/json', [BlogPostController::class, 'yourPostsJson'])->name('blogpost.yourposts.json')->middleware('auth');
+
 //Middleware for authenticated routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/blogpost/create', [BlogPostController::class, 'create'])->name('blogpost.create');
@@ -41,5 +45,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/blogpost/{slug}/comment', [CommentController::class, 'store'])->name('blogpost.comment.store');
     Route::get('/blogpost/{slug}/comments', [CommentController::class, 'fetchComments']);
     Route::post('/blogpost/{slug}/comments', [CommentController::class, 'storeComment']);
-
 });

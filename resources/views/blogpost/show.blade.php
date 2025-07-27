@@ -10,6 +10,17 @@
 >
     {{-- Blog Metadata --}}
     <header class="space-y-2 border-b pb-6">
+        @if(session('success'))
+            <div 
+                x-data="{ show: true }" 
+                x-init="setTimeout(() => show = false, 3000)" 
+                x-show="show"
+                x-transition
+                class="bg-green-200 text-green-800 p-3 rounded mb-4"
+            >
+                {{ session('success') }}
+            </div>
+        @endif
         <h1 class="text-4xl font-bold">{{ $post->title }}</h1>
             @auth
             @if ($post->status === 'D' && auth()->id() === $post->user_id)

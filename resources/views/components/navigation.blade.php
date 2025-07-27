@@ -11,7 +11,37 @@
         {{-- Center: Desktop Nav --}}
         <nav class="hidden md:flex space-x-6 text-sm font-medium">
             <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'text-[#BCE4E0] border-b-2 border-[#BCE4E0] pb-1' : 'hover:text-[#BCE4E0]' }}">Home</a>
-            <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs') || $route === 'blogpost.show' ? 'text-[#BCE4E0] border-b-2 border-[#BCE4E0] pb-1' : 'hover:text-[#BCE4E0]' }}">Blogs</a>
+           @auth
+            <div 
+                x-data="{ open: false }"
+                @mouseenter="open = true"
+                @mouseleave="open = false"
+                class="relative"
+            >
+                <div 
+                    @click="open = !open"
+                    class="cursor-pointer flex items-center space-x-1 hover:text-[#BCE4E0] {{ request()->is('blogs') || $route === 'blogpost.show' || request()->is('your-posts') ? 'text-[#BCE4E0] border-b-2 border-[#BCE4E0] pb-1' : '' }}"
+                >
+                    <span>Blogs</span>
+                    <svg class="w-4 h-4 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+
+                <div 
+                    x-show="open"
+                    x-transition
+                    @click.away="open = false"
+                    class="absolute bg-white text-[#1A3D3F] rounded shadow-md mt-2 min-w-[160px] z-50"
+                    style="display: none;"
+                >
+                    <a href="{{ url('/blogs') }}" class="block px-4 py-2 hover:bg-[#BCE4E0] hover:text-[#1A3D3F]">All Blog Posts</a>
+                    <a href="{{ url('/your-posts') }}" class="block px-4 py-2 hover:bg-[#BCE4E0] hover:text-[#1A3D3F]">Your Posts</a>
+                </div>
+            </div>
+            @else
+                <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs') || $route === 'blogpost.show' ? 'text-[#BCE4E0] border-b-2 border-[#BCE4E0] pb-1' : 'hover:text-[#BCE4E0]' }}">Blogs</a>
+            @endauth
             <a href="{{ url('/about') }}" class="{{ request()->is('about') ? 'text-[#BCE4E0] border-b-2 border-[#BCE4E0] pb-1' : 'hover:text-[#BCE4E0]' }}">About</a>
             <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'text-[#BCE4E0] border-b-2 border-[#BCE4E0] pb-1' : 'hover:text-[#BCE4E0]' }}">Contact</a>
         </nav>
@@ -47,7 +77,15 @@
     {{-- Mobile Nav --}}
     <div id="mobileMenu" class="hidden md:hidden bg-[#1A3D3F] px-4 pb-4 space-y-2 text-sm">
         <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'text-[#BCE4E0]' : 'hover:text-[#BCE4E0]' }} block">Home</a>
-        <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs') || $route === 'blogpost.show' ? 'text-[#BCE4E0]' : 'hover:text-[#BCE4E0]' }} block">Blogs</a>
+        @auth
+            <div>
+                <span class="block text-[#BCE4E0] font-semibold">Blogs</span>
+                <a href="{{ url('/blogs') }}" class="ml-4 block hover:text-[#BCE4E0]">All Blog Posts</a>
+                <a href="{{ url('/your-posts') }}" class="ml-4 block hover:text-[#BCE4E0]">Your Posts</a>
+            </div>
+        @else
+            <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs') || $route === 'blogpost.show' ? 'text-[#BCE4E0]' : 'hover:text-[#BCE4E0]' }} block">Blogs</a>
+        @endauth
         <a href="{{ url('/about') }}" class="{{ request()->is('about') ? 'text-[#BCE4E0]' : 'hover:text-[#BCE4E0]' }} block">About</a>
         <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'text-[#BCE4E0]' : 'hover:text-[#BCE4E0]' }} block">Contact</a>
 
