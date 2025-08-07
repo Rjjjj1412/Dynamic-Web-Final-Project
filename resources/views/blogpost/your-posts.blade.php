@@ -61,6 +61,19 @@
                                 <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs" x-text="'#' + tag.tag_name"></span>
                             </template>
                         </div>
+
+                        <!-- Edit Button for Draft Posts-->
+                        <template x-if="post.status === 'D'">
+                            <div class="mt-3 flex justify-end">
+                                <a 
+                                    :href="`/blogpost/${post.slug}/edit`"
+                                    class="inline-flex items-center gap-1 bg-[#7AD1C2] hover:bg-[#6bb8ad] text-[#1A3D3F] text-xs font-semibold px-3 py-1 rounded-full shadow-sm transition-all duration-200"
+                                >
+                                    ✏️ Edit Draft
+                                </a>
+                            </div>
+                        </template>
+
                     </div>
                 </div>
             </template>
